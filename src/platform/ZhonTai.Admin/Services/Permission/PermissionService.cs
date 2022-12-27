@@ -13,7 +13,6 @@ using ZhonTai.Admin.Domain.TenantPermission;
 using ZhonTai.Admin.Domain.UserRole;
 using ZhonTai.Admin.Domain.PermissionApi;
 using ZhonTai.Admin.Domain.Role;
-using ZhonTai.Admin.Domain.Api;
 using ZhonTai.Admin.Domain.User;
 using ZhonTai.DynamicApi;
 using ZhonTai.DynamicApi.Attributes;
@@ -102,11 +101,11 @@ public class PermissionService : BaseService, IPermissionService, IDynamicApi
     {
         var output = await _permissionRepository.Select
         .WhereDynamic(id)
-        .IncludeMany(a => a.Apis.Select(b => new ApiEntity { Id = b.Id }))
-        .ToOneAsync();
-
-        var permissionGetDotOutput= Mapper.Map<PermissionGetDotOutput>(output);
-        return permissionGetDotOutput;
+        .ToOneAsync(a => new PermissionGetDotOutput
+        {
+            ApiIds = _permissionApiRepository.Where(b => b.PermissionId == a.Id).OrderBy(a => a.Id).ToList(b => b.Api.Id)
+        });
+        return output;
     }
 
     /// <summary>
@@ -126,9 +125,13 @@ public class PermissionService : BaseService, IPermissionService, IDynamicApi
         var data = await _permissionRepository
             .WhereIf(key.NotNull(), a => a.Path.Contains(key) || a.Label.Contains(key))
             .WhereIf(start.HasValue && end.HasValue, a => a.CreatedTime.Value.BetweenEnd(start.Value, end.Value))
-            .OrderBy(a => a.ParentId)
-            .OrderBy(a => a.Sort)
-            .ToListAsync(a=> new PermissionListOutput { ApiPaths = string.Join(";", _permissionApiRepository.Where(b=>b.PermissionId == a.Id).ToList(b => b.Api.Path)) });
+            .Include(a => a.View)
+            .OrderBy(a => new { a.ParentId, a.Sort })
+            .ToListAsync(a=> new PermissionListOutput 
+            {
+                ViewPath = a.View.Path,
+                ApiPaths = string.Join(";", _permissionApiRepository.Where(b=>b.PermissionId == a.Id).ToList(b => b.Api.Path)) 
+            });
 
         return data;
     }
@@ -196,6 +199,14 @@ public class PermissionService : BaseService, IPermissionService, IDynamicApi
     public async Task<long> AddGroupAsync(PermissionAddGroupInput input)
     {
         var entity = Mapper.Map<PermissionEntity>(input);
+        entity.Type = PermissionType.Group;
+
+        if (entity.Sort == 0)
+        {
+            var sort = await _permissionRepository.Select.Where(a => a.ParentId == input.ParentId).MaxAsync(a => a.Sort);
+            entity.Sort = sort + 1;
+        }
+
         await _permissionRepository.InsertAsync(entity);
         return entity.Id;
     }
@@ -208,6 +219,12 @@ public class PermissionService : BaseService, IPermissionService, IDynamicApi
     public async Task<long> AddMenuAsync(PermissionAddMenuInput input)
     {
         var entity = Mapper.Map<PermissionEntity>(input);
+        entity.Type = PermissionType.Menu;
+        if (entity.Sort == 0)
+        {
+            var sort = await _permissionRepository.Select.Where(a => a.ParentId == input.ParentId).MaxAsync(a => a.Sort);
+            entity.Sort = sort + 1;
+        }
         await _permissionRepository.InsertAsync(entity);
 
         return entity.Id;
@@ -221,6 +238,12 @@ public class PermissionService : BaseService, IPermissionService, IDynamicApi
     public async Task<long> AddApiAsync(PermissionAddApiInput input)
     {
         var entity = Mapper.Map<PermissionEntity>(input);
+        entity.Type = PermissionType.Dot;
+        if (entity.Sort == 0)
+        {
+            var sort = await _permissionRepository.Select.Where(a => a.ParentId == input.ParentId).MaxAsync(a => a.Sort);
+            entity.Sort = sort + 1;
+        }
         await _permissionRepository.InsertAsync(entity);
 
         return entity.Id;
@@ -235,6 +258,7 @@ public class PermissionService : BaseService, IPermissionService, IDynamicApi
     public virtual async Task<long> AddDotAsync(PermissionAddDotInput input)
     {
         var entity = Mapper.Map<PermissionEntity>(input);
+        entity.Type = PermissionType.Dot;
         await _permissionRepository.InsertAsync(entity);
 
         if (input.ApiIds != null && input.ApiIds.Any())

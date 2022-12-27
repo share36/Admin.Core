@@ -15,7 +15,7 @@ public class EntityTenant<TKey> : EntityBase, ITenant
     [Description("租户Id")]
     [Column(Position = 2, CanUpdate = false)]
     [JsonProperty(Order = -20)]
-    public long? TenantId { get; set; }
+    public virtual long? TenantId { get; set; }
 }
 
 /// <summary>

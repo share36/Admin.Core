@@ -9,6 +9,16 @@
             启用权限库事务
             </summary>
         </member>
+        <member name="T:ZhonTai.Admin.Core.Attributes.ApiGroupAttribute">
+            <summary>
+            接口分组
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Core.Attributes.ApiGroupAttribute.GroupNames">
+            <summary>
+            分组名称列表
+            </summary>
+        </member>
         <member name="T:ZhonTai.Admin.Core.Attributes.LoginAttribute">
             <summary>
             启用登录
@@ -561,6 +571,11 @@
             同步数据
             </summary>
         </member>
+        <member name="P:ZhonTai.Admin.Core.Configs.DbConfig.SyncDataPath">
+            <summary>
+            同步数据地址
+            </summary>
+        </member>
         <member name="P:ZhonTai.Admin.Core.Configs.DbConfig.CreateDb">
             <summary>
             建库
@@ -774,6 +789,11 @@
         <member name="F:ZhonTai.Admin.Core.Consts.FilterNames.Data">
             <summary>
             数据权限
+            </summary>
+        </member>
+        <member name="F:ZhonTai.Admin.Core.Consts.FilterNames.Member">
+            <summary>
+            会员
             </summary>
         </member>
         <member name="T:ZhonTai.Admin.Core.Conventions.ApiGroupConvention">
@@ -1108,11 +1128,12 @@
             <param name="msg">消息</param>
             <returns></returns>
         </member>
-        <member name="M:ZhonTai.Admin.Core.Dto.ResultOutput.Exception(System.String)">
+        <member name="M:ZhonTai.Admin.Core.Dto.ResultOutput.Exception(System.String,System.String)">
             <summary>
             系统异常
             </summary>
             <param name="msg">消息</param>
+            <param name="code">编码</param>
             <returns></returns>
         </member>
         <member name="M:ZhonTai.Admin.Core.Dto.ResultOutput.Result``1(System.Boolean)">
@@ -1209,6 +1230,51 @@
             实体删除
             </summary>
         </member>
+        <member name="T:ZhonTai.Admin.Core.Entities.EntityMember`1">
+            <summary>
+            实体会员
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Core.Entities.EntityMember`1.MemberId">
+            <summary>
+            会员Id
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Core.Entities.EntityMember`1.CreatedTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Core.Entities.EntityMember`1.ModifiedTime">
+            <summary>
+            修改时间
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Core.Entities.EntityMember`1.IsDeleted">
+            <summary>
+            是否删除
+            </summary>
+        </member>
+        <member name="T:ZhonTai.Admin.Core.Entities.EntityMember">
+            <summary>
+            实体会员
+            </summary>
+        </member>
+        <member name="T:ZhonTai.Admin.Core.Entities.EntityMemberWithTenant`1">
+            <summary>
+            实体会员租户
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Core.Entities.EntityMemberWithTenant`1.TenantId">
+            <summary>
+            租户Id
+            </summary>
+        </member>
+        <member name="T:ZhonTai.Admin.Core.Entities.EntityMemberWithTenant">
+            <summary>
+            实体会员租户
+            </summary>
+        </member>
         <member name="T:ZhonTai.Admin.Core.Entities.EntityTenant`1">
             <summary>
             实体租户
@@ -1227,11 +1293,6 @@
         <member name="T:ZhonTai.Admin.Core.Entities.EntityTenantWithData`1">
             <summary>
             实体租户数据权限
-            </summary>
-        </member>
-        <member name="P:ZhonTai.Admin.Core.Entities.EntityTenantWithData`1.TenantId">
-            <summary>
-            租户Id
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Core.Entities.EntityTenantWithData`1.OwnerId">
@@ -1354,6 +1415,16 @@
         <member name="P:ZhonTai.Admin.Core.Entities.IEntityUpdate`1.ModifiedTime">
             <summary>
             修改时间
+            </summary>
+        </member>
+        <member name="T:ZhonTai.Admin.Core.Entities.IMember">
+            <summary>
+            会员接口
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Core.Entities.IMember.MemberId">
+            <summary>
+            顾客Id
             </summary>
         </member>
         <member name="T:ZhonTai.Admin.Core.Entities.ITenant">
@@ -1481,6 +1552,24 @@
             <param name="file"></param>
             <param name="filePath"></param>
             <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ZhonTai.Admin.Core.HostApp">
+            <summary>
+            宿主应用
+            </summary>
+        </member>
+        <member name="M:ZhonTai.Admin.Core.HostApp.Run(System.String[])">
+            <summary>
+            运行应用
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:ZhonTai.Admin.Core.HostApp.DefaultSchemaIdSelector(System.Type)">
+            <summary>
+            实体类型重命名
+            </summary>
+            <param name="modelType"></param>
             <returns></returns>
         </member>
         <member name="M:ZhonTai.Admin.Core.HostApp.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.AspNetCore.Hosting.IWebHostEnvironment,Microsoft.Extensions.Configuration.IConfiguration,ZhonTai.Common.Helpers.ConfigHelper,ZhonTai.Admin.Core.Configs.AppConfig)">
@@ -1665,7 +1754,7 @@
         </member>
         <member name="T:ZhonTai.Admin.Core.Startup.HostAppOptions">
             <summary>
-            HostApp配置
+            宿主应用配置
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Core.Startup.HostAppOptions.ConfigurePreServices">
@@ -2030,7 +2119,7 @@
         </member>
         <member name="T:ZhonTai.Admin.Domain.LoginLog.LoginLogEntity">
             <summary>
-            操作日志
+            登录日志
             </summary>
         </member>
         <member name="T:ZhonTai.Admin.Domain.OprationLog.OprationLogEntity">
@@ -2095,11 +2184,6 @@
             成员数
             </summary>
         </member>
-        <member name="P:ZhonTai.Admin.Domain.Org.OrgEntity.Description">
-            <summary>
-            描述
-            </summary>
-        </member>
         <member name="P:ZhonTai.Admin.Domain.Org.OrgEntity.Enabled">
             <summary>
             启用
@@ -2108,6 +2192,11 @@
         <member name="P:ZhonTai.Admin.Domain.Org.OrgEntity.Sort">
             <summary>
             排序
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Domain.Org.OrgEntity.Description">
+            <summary>
+            描述
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Domain.Org.OrgEntity.Staffs">
@@ -2182,12 +2271,27 @@
         </member>
         <member name="P:ZhonTai.Admin.Domain.Permission.PermissionEntity.ViewId">
             <summary>
+            视图Id
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Domain.Permission.PermissionEntity.View">
+            <summary>
             视图
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Domain.Permission.PermissionEntity.Name">
+            <summary>
+            路由命名
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Domain.Permission.PermissionEntity.Path">
             <summary>
-            菜单访问地址
+            路由地址
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Domain.Permission.PermissionEntity.Redirect">
+            <summary>
+            重定向地址
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Domain.Permission.PermissionEntity.Icon">
@@ -2200,19 +2304,9 @@
             隐藏
             </summary>
         </member>
-        <member name="P:ZhonTai.Admin.Domain.Permission.PermissionEntity.Enabled">
-            <summary>
-            启用
-            </summary>
-        </member>
-        <member name="P:ZhonTai.Admin.Domain.Permission.PermissionEntity.Closable">
-            <summary>
-            可关闭
-            </summary>
-        </member>
         <member name="P:ZhonTai.Admin.Domain.Permission.PermissionEntity.Opened">
             <summary>
-            打开组
+            展开分组
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Domain.Permission.PermissionEntity.NewWindow">
@@ -2225,6 +2319,26 @@
             链接外显
             </summary>
         </member>
+        <member name="P:ZhonTai.Admin.Domain.Permission.PermissionEntity.IsKeepAlive">
+            <summary>
+            是否缓存
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Domain.Permission.PermissionEntity.IsAffix">
+            <summary>
+            是否固定
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Domain.Permission.PermissionEntity.Link">
+            <summary>
+            链接地址
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Domain.Permission.PermissionEntity.IsIframe">
+            <summary>
+            是否内嵌窗口
+            </summary>
+        </member>
         <member name="P:ZhonTai.Admin.Domain.Permission.PermissionEntity.Sort">
             <summary>
             排序
@@ -2233,6 +2347,11 @@
         <member name="P:ZhonTai.Admin.Domain.Permission.PermissionEntity.Description">
             <summary>
             描述
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Domain.Permission.PermissionEntity.Enabled">
+            <summary>
+            启用
             </summary>
         </member>
         <member name="T:ZhonTai.Admin.Domain.Permission.PermissionType">
@@ -2355,6 +2474,20 @@
             角色Id
             </summary>
         </member>
+        <member name="M:ZhonTai.Admin.Domain.Role.IRoleRepository.GetChildIdListAsync(System.Int64)">
+            <summary>
+            获得本角色和下级角色Id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ZhonTai.Admin.Domain.Role.IRoleRepository.GetChildIdListAsync(System.Int64[])">
+            <summary>
+            获得当前角色和下级角色Id
+            </summary>
+            <param name="ids"></param>
+            <returns></returns>
+        </member>
         <member name="T:ZhonTai.Admin.Domain.Role.RoleEntity">
             <summary>
             角色
@@ -2378,6 +2511,11 @@
         <member name="P:ZhonTai.Admin.Domain.Role.RoleEntity.Code">
             <summary>
             编码
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Domain.Role.RoleEntity.Type">
+            <summary>
+            角色类型
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Domain.Role.RoleEntity.DataScope">
@@ -2413,6 +2551,21 @@
         <member name="P:ZhonTai.Admin.Domain.Role.RoleEntity.Permissions">
             <summary>
             权限列表
+            </summary>
+        </member>
+        <member name="T:ZhonTai.Admin.Domain.Role.RoleType">
+            <summary>
+            角色类型
+            </summary>
+        </member>
+        <member name="F:ZhonTai.Admin.Domain.Role.RoleType.Group">
+            <summary>
+            分组
+            </summary>
+        </member>
+        <member name="F:ZhonTai.Admin.Domain.Role.RoleType.Role">
+            <summary>
+            角色
             </summary>
         </member>
         <member name="T:ZhonTai.Admin.Domain.TenantPermission.TenantPermissionEntity">
@@ -2854,9 +3007,14 @@
             用户类型
             </summary>
         </member>
+        <member name="F:ZhonTai.Admin.Domain.User.UserType.Member">
+            <summary>
+            会员
+            </summary>
+        </member>
         <member name="F:ZhonTai.Admin.Domain.User.UserType.DefaultUser">
             <summary>
-            默认用户
+            普通用户
             </summary>
         </member>
         <member name="F:ZhonTai.Admin.Domain.User.UserType.TenantAdmin">
@@ -2944,11 +3102,6 @@
             说明
             </summary>
         </member>
-        <member name="P:ZhonTai.Admin.Domain.View.ViewEntity.Enabled">
-            <summary>
-            启用
-            </summary>
-        </member>
         <member name="P:ZhonTai.Admin.Domain.View.ViewEntity.Cache">
             <summary>
             缓存
@@ -2957,6 +3110,11 @@
         <member name="P:ZhonTai.Admin.Domain.View.ViewEntity.Sort">
             <summary>
             排序
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Domain.View.ViewEntity.Enabled">
+            <summary>
+            启用
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Domain.Task.Dto.TaskGetPageDto.Topic">
@@ -2975,6 +3133,20 @@
             获得本部门和下级部门Id
             </summary>
             <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ZhonTai.Admin.Repositories.RoleRepository.GetChildIdListAsync(System.Int64)">
+            <summary>
+            获得本角色和下级角色Id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ZhonTai.Admin.Repositories.RoleRepository.GetChildIdListAsync(System.Int64[])">
+            <summary>
+            获得当前角色和下级角色Id
+            </summary>
+            <param name="ids"></param>
             <returns></returns>
         </member>
         <member name="M:ZhonTai.Admin.Repositories.UserOrgRepository.HasUser(System.Int64)">
@@ -3342,12 +3514,22 @@
         </member>
         <member name="P:ZhonTai.Admin.Services.Auth.Dto.AuthUserMenuDto.Path">
             <summary>
-            访问地址
+            路由地址
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Auth.Dto.AuthUserMenuDto.Name">
+            <summary>
+            路由命名
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Services.Auth.Dto.AuthUserMenuDto.ViewPath">
             <summary>
             视图地址
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Auth.Dto.AuthUserMenuDto.Redirect">
+            <summary>
+            重定向地址
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Services.Auth.Dto.AuthUserMenuDto.Label">
@@ -3365,11 +3547,6 @@
             打开
             </summary>
         </member>
-        <member name="P:ZhonTai.Admin.Services.Auth.Dto.AuthUserMenuDto.Closable">
-            <summary>
-            可关闭
-            </summary>
-        </member>
         <member name="P:ZhonTai.Admin.Services.Auth.Dto.AuthUserMenuDto.Hidden">
             <summary>
             隐藏
@@ -3383,6 +3560,26 @@
         <member name="P:ZhonTai.Admin.Services.Auth.Dto.AuthUserMenuDto.External">
             <summary>
             链接外显
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Auth.Dto.AuthUserMenuDto.IsKeepAlive">
+            <summary>
+            是否缓存
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Auth.Dto.AuthUserMenuDto.IsAffix">
+            <summary>
+            是否固定
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Auth.Dto.AuthUserMenuDto.Link">
+            <summary>
+            链接地址
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Auth.Dto.AuthUserMenuDto.IsIframe">
+            <summary>
+            是否内嵌窗口
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Services.Auth.Dto.AuthUserMenuDto.Sort">
@@ -4350,24 +4547,19 @@
             值
             </summary>
         </member>
-        <member name="P:ZhonTai.Admin.Services.Org.Input.OrgAddInput.PrimaryUserId">
+        <member name="P:ZhonTai.Admin.Services.Org.Input.OrgAddInput.Enabled">
             <summary>
-            主管
+            启用
             </summary>
         </member>
-        <member name="P:ZhonTai.Admin.Services.Org.Input.OrgAddInput.StaffCount">
+        <member name="P:ZhonTai.Admin.Services.Org.Input.OrgAddInput.Sort">
             <summary>
-            员工人数
+            排序
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Services.Org.Input.OrgAddInput.Description">
             <summary>
             描述
-            </summary>
-        </member>
-        <member name="P:ZhonTai.Admin.Services.Org.Input.OrgAddInput.Enabled">
-            <summary>
-            启用
             </summary>
         </member>
         <member name="T:ZhonTai.Admin.Services.Org.Input.OrgUpdateInput">
@@ -4452,24 +4644,24 @@
             值
             </summary>
         </member>
-        <member name="P:ZhonTai.Admin.Services.Org.Output.OrgListOutput.Description">
-            <summary>
-            描述
-            </summary>
-        </member>
         <member name="P:ZhonTai.Admin.Services.Org.Output.OrgListOutput.Enabled">
             <summary>
             启用
             </summary>
         </member>
+        <member name="P:ZhonTai.Admin.Services.Org.Output.OrgListOutput.Sort">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Org.Output.OrgListOutput.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
         <member name="P:ZhonTai.Admin.Services.Org.Output.OrgListOutput.CreatedTime">
             <summary>
             创建时间
-            </summary>
-        </member>
-        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddApiInput.Type">
-            <summary>
-            权限类型
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddApiInput.ParentId">
@@ -4507,9 +4699,14 @@
             图标
             </summary>
         </member>
-        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddDotInput.Type">
+        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddApiInput.Sort">
             <summary>
-            权限类型
+            排序
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddApiInput.Enabled">
+            <summary>
+            启用
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddDotInput.ParentId">
@@ -4542,14 +4739,39 @@
             图标
             </summary>
         </member>
-        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddGroupInput.Type">
+        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddDotInput.Sort">
             <summary>
-            权限类型
+            排序
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddDotInput.Enabled">
+            <summary>
+            启用
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddGroupInput.ParentId">
             <summary>
             父级节点
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddGroupInput.ViewId">
+            <summary>
+            视图
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddGroupInput.Name">
+            <summary>
+            路由命名
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddGroupInput.Path">
+            <summary>
+            访问路由地址
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddGroupInput.Redirect">
+            <summary>
+            重定向地址
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddGroupInput.Label">
@@ -4569,12 +4791,17 @@
         </member>
         <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddGroupInput.Opened">
             <summary>
-            打开
+            展开
             </summary>
         </member>
-        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddMenuInput.Type">
+        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddGroupInput.Sort">
             <summary>
-            权限类型
+            排序
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddGroupInput.Enabled">
+            <summary>
+            启用
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddMenuInput.ParentId">
@@ -4587,9 +4814,14 @@
             视图
             </summary>
         </member>
+        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddMenuInput.Name">
+            <summary>
+            路由命名
+            </summary>
+        </member>
         <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddMenuInput.Path">
             <summary>
-            访问地址
+            路由地址
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddMenuInput.Label">
@@ -4612,11 +4844,6 @@
             图标
             </summary>
         </member>
-        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddMenuInput.Closable">
-            <summary>
-            可关闭
-            </summary>
-        </member>
         <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddMenuInput.NewWindow">
             <summary>
             打开新窗口
@@ -4625,6 +4852,36 @@
         <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddMenuInput.External">
             <summary>
             链接外显
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddMenuInput.IsKeepAlive">
+            <summary>
+            是否缓存
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddMenuInput.IsAffix">
+            <summary>
+            是否固定
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddMenuInput.Link">
+            <summary>
+            链接地址
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddMenuInput.IsIframe">
+            <summary>
+            是否内嵌窗口
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddMenuInput.Sort">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionAddMenuInput.Enabled">
+            <summary>
+            启用
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionListOutput.Id">
@@ -4648,8 +4905,23 @@
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionListOutput.Path">
+             <summary>
+            路由地址
+             </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionListOutput.Redirect">
             <summary>
-            访问地址
+            重定向地址
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionListOutput.ViewPath">
+            <summary>
+            视图地址
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionListOutput.Link">
+            <summary>
+            链接地址
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionListOutput.ApiPaths">
@@ -4657,24 +4929,19 @@
             接口路径
             </summary>
         </member>
-        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionListOutput.Description">
-            <summary>
-            描述
-            </summary>
-        </member>
         <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionListOutput.Icon">
             <summary>
             图标
             </summary>
         </member>
-        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionListOutput.Opened">
+        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionListOutput.Sort">
             <summary>
-            组打开
+            排序
             </summary>
         </member>
-        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionListOutput.Hidden">
+        <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionListOutput.Description">
             <summary>
-            隐藏
+            描述
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Services.Permission.Dto.PermissionListOutput.Enabled">
@@ -4885,6 +5152,11 @@
             编码
             </summary>
         </member>
+        <member name="P:ZhonTai.Admin.Services.Role.Dto.RoleAddInput.Type">
+            <summary>
+            角色类型
+            </summary>
+        </member>
         <member name="P:ZhonTai.Admin.Services.Role.Dto.RoleAddInput.DataScope">
             <summary>
             数据范围
@@ -4940,6 +5212,26 @@
             名称
             </summary>
         </member>
+        <member name="P:ZhonTai.Admin.Services.Role.Dto.RoleGetListOutput.Code">
+            <summary>
+            编码
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Role.Dto.RoleGetListOutput.Type">
+            <summary>
+            角色类型
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Role.Dto.RoleGetListOutput.Sort">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Role.Dto.RoleGetListOutput.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
         <member name="P:ZhonTai.Admin.Services.Role.Dto.RoleGetPageOutput.Id">
             <summary>
             主键
@@ -4970,6 +5262,26 @@
             创建时间
             </summary>
         </member>
+        <member name="T:ZhonTai.Admin.Services.Role.Dto.RoleSetDataScopeInput">
+            <summary>
+            设置数据范围
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Role.Dto.RoleSetDataScopeInput.RoleId">
+            <summary>
+            角色Id
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Role.Dto.RoleSetDataScopeInput.DataScope">
+            <summary>
+            数据范围
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.Role.Dto.RoleSetDataScopeInput.OrgIds">
+            <summary>
+            指定部门
+            </summary>
+        </member>
         <member name="T:ZhonTai.Admin.Services.Role.Dto.RoleUpdateInput">
             <summary>
             修改
@@ -4977,7 +5289,7 @@
         </member>
         <member name="P:ZhonTai.Admin.Services.Role.Dto.RoleUpdateInput.Id">
             <summary>
-            接口Id
+            角色Id
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Services.Role.Dto.UserGetRoleUserListOutput.Id">
@@ -5082,6 +5394,13 @@
             批量删除
             </summary>
             <param name="ids"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ZhonTai.Admin.Services.Role.RoleService.SetDataScopeAsync(ZhonTai.Admin.Services.Role.Dto.RoleSetDataScopeInput)">
+            <summary>
+            设置数据权限
+            </summary>
+            <param name="input"></param>
             <returns></returns>
         </member>
         <member name="T:ZhonTai.Admin.Services.Role.MapConfig">
@@ -5451,54 +5770,9 @@
             添加
             </summary>
         </member>
-        <member name="P:ZhonTai.Admin.Services.User.Dto.UserAddInput.UserName">
-            <summary>
-            账号
-            </summary>
-        </member>
         <member name="P:ZhonTai.Admin.Services.User.Dto.UserAddInput.Password">
             <summary>
             密码
-            </summary>
-        </member>
-        <member name="P:ZhonTai.Admin.Services.User.Dto.UserAddInput.Name">
-            <summary>
-            姓名
-            </summary>
-        </member>
-        <member name="P:ZhonTai.Admin.Services.User.Dto.UserAddInput.Mobile">
-            <summary>
-            手机号
-            </summary>
-        </member>
-        <member name="P:ZhonTai.Admin.Services.User.Dto.UserAddInput.Email">
-            <summary>
-            邮箱
-            </summary>
-        </member>
-        <member name="P:ZhonTai.Admin.Services.User.Dto.UserAddInput.RoleIds">
-            <summary>
-            角色
-            </summary>
-        </member>
-        <member name="P:ZhonTai.Admin.Services.User.Dto.UserAddInput.OrgIds">
-            <summary>
-            所属部门
-            </summary>
-        </member>
-        <member name="P:ZhonTai.Admin.Services.User.Dto.UserAddInput.OrgId">
-            <summary>
-            主属部门Id
-            </summary>
-        </member>
-        <member name="P:ZhonTai.Admin.Services.User.Dto.UserAddInput.ManagerUserId">
-            <summary>
-            直属主管Id
-            </summary>
-        </member>
-        <member name="P:ZhonTai.Admin.Services.User.Dto.UserAddInput.ManagerUserName">
-            <summary>
-            直属主管姓名
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Services.User.Dto.UserAddInput.Status">
@@ -5506,9 +5780,19 @@
             状态
             </summary>
         </member>
-        <member name="P:ZhonTai.Admin.Services.User.Dto.UserAddInput.Staff">
+        <member name="T:ZhonTai.Admin.Services.User.Dto.UserAddMemberInput">
             <summary>
-            员工
+            添加会员
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserAddMemberInput.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserAddMemberInput.Status">
+            <summary>
+            状态
             </summary>
         </member>
         <member name="T:ZhonTai.Admin.Services.User.Dto.UserChangePasswordInput">
@@ -5529,6 +5813,116 @@
         <member name="P:ZhonTai.Admin.Services.User.Dto.UserChangePasswordInput.ConfirmPassword">
             <summary>
             确认新密码
+            </summary>
+        </member>
+        <member name="T:ZhonTai.Admin.Services.User.Dto.UserFormInput">
+            <summary>
+            用户表单
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserFormInput.UserName">
+            <summary>
+            账号
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserFormInput.Name">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserFormInput.Mobile">
+            <summary>
+            手机号
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserFormInput.Email">
+            <summary>
+            邮箱
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserFormInput.RoleIds">
+            <summary>
+            角色Ids
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserFormInput.OrgIds">
+            <summary>
+            所属部门Ids
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserFormInput.OrgId">
+            <summary>
+            主属部门Id
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserFormInput.ManagerUserId">
+            <summary>
+            直属主管Id
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserFormInput.ManagerUserName">
+            <summary>
+            直属主管姓名
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserFormInput.Staff">
+            <summary>
+            员工
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserGetBasicOutput.Avatar">
+            <summary>
+            头像
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserGetBasicOutput.Name">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserGetBasicOutput.NickName">
+            <summary>
+            昵称
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserGetBasicOutput.Mobile">
+            <summary>
+            手机号
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserGetBasicOutput.Email">
+            <summary>
+            邮箱
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserGetOutput.Roles">
+            <summary>
+            角色列表
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserGetOutput.Orgs">
+            <summary>
+            部门列表
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserGetOutput.OrgIds">
+            <summary>
+            所属部门Ids
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserGetOutput.RoleIds">
+            <summary>
+            角色Ids
+            </summary>
+        </member>
+        <member name="T:ZhonTai.Admin.Services.User.Dto.UserGetPageDto">
+            <summary>
+            用户分页查询条件
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserGetPageDto.OrgId">
+            <summary>
+            部门Id
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Services.User.Dto.UserGetPageOutput.Id">
@@ -5576,6 +5970,31 @@
             创建时间
             </summary>
         </member>
+        <member name="T:ZhonTai.Admin.Services.User.Dto.UserMemberFormInput">
+            <summary>
+            会员表单
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserMemberFormInput.UserName">
+            <summary>
+            账号
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserMemberFormInput.Name">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserMemberFormInput.Mobile">
+            <summary>
+            手机号
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserMemberFormInput.Email">
+            <summary>
+            邮箱
+            </summary>
+        </member>
         <member name="T:ZhonTai.Admin.Services.User.Dto.UserResetPasswordInput">
             <summary>
             重置密码
@@ -5611,11 +6030,6 @@
             更新基本信息
             </summary>
         </member>
-        <member name="P:ZhonTai.Admin.Services.User.Dto.UserUpdateBasicInput.Avatar">
-            <summary>
-            头像
-            </summary>
-        </member>
         <member name="P:ZhonTai.Admin.Services.User.Dto.UserUpdateBasicInput.Name">
             <summary>
             姓名
@@ -5624,11 +6038,6 @@
         <member name="P:ZhonTai.Admin.Services.User.Dto.UserUpdateBasicInput.NickName">
             <summary>
             昵称
-            </summary>
-        </member>
-        <member name="P:ZhonTai.Admin.Services.User.Dto.UserUpdateBasicInput.Introduce">
-            <summary>
-            个人简介
             </summary>
         </member>
         <member name="T:ZhonTai.Admin.Services.User.Dto.UserUpdateInput">
@@ -5641,69 +6050,14 @@
             主键Id
             </summary>
         </member>
-        <member name="P:ZhonTai.Admin.Services.User.Dto.UserUpdateInput.UserName">
+        <member name="T:ZhonTai.Admin.Services.User.Dto.UserUpdateMemberInput">
             <summary>
-            账号
+            修改会员
             </summary>
         </member>
-        <member name="P:ZhonTai.Admin.Services.User.Dto.UserUpdateInput.Name">
+        <member name="P:ZhonTai.Admin.Services.User.Dto.UserUpdateMemberInput.Id">
             <summary>
-            姓名
-            </summary>
-        </member>
-        <member name="P:ZhonTai.Admin.Services.User.Dto.UserUpdateInput.Mobile">
-            <summary>
-            手机号
-            </summary>
-        </member>
-        <member name="P:ZhonTai.Admin.Services.User.Dto.UserUpdateInput.Email">
-            <summary>
-            邮箱
-            </summary>
-        </member>
-        <member name="P:ZhonTai.Admin.Services.User.Dto.UserUpdateInput.RoleIds">
-            <summary>
-            角色
-            </summary>
-        </member>
-        <member name="P:ZhonTai.Admin.Services.User.Dto.UserUpdateInput.Roles">
-            <summary>
-            角色
-            </summary>
-        </member>
-        <member name="P:ZhonTai.Admin.Services.User.Dto.UserUpdateInput.OrgIds">
-            <summary>
-            所属部门
-            </summary>
-        </member>
-        <member name="P:ZhonTai.Admin.Services.User.Dto.UserUpdateInput.Orgs">
-            <summary>
-            部门列表
-            </summary>
-        </member>
-        <member name="P:ZhonTai.Admin.Services.User.Dto.UserUpdateInput.OrgId">
-            <summary>
-            主属部门Id
-            </summary>
-        </member>
-        <member name="P:ZhonTai.Admin.Services.User.Dto.UserUpdateInput.ManagerUserId">
-            <summary>
-            直属主管Id
-            </summary>
-        </member>
-        <member name="P:ZhonTai.Admin.Services.User.Dto.UserUpdateInput.ManagerUserName">
-            <summary>
-            直属主管姓名
-            </summary>
-        </member>
-        <member name="P:ZhonTai.Admin.Services.User.Dto.UserUpdateInput.Status">
-            <summary>
-            状态
-            </summary>
-        </member>
-        <member name="P:ZhonTai.Admin.Services.User.Dto.UserUpdateInput.Staff">
-            <summary>
-            员工信息
+            主键Id
             </summary>
         </member>
         <member name="T:ZhonTai.Admin.Services.User.IUserService">
@@ -5723,7 +6077,7 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:ZhonTai.Admin.Services.User.UserService.GetPageAsync(ZhonTai.Admin.Core.Dto.PageInput{System.Nullable{System.Int64}})">
+        <member name="M:ZhonTai.Admin.Services.User.UserService.GetPageAsync(ZhonTai.Admin.Core.Dto.PageInput{ZhonTai.Admin.Services.User.Dto.UserGetPageDto})">
             <summary>
             查询分页
             </summary>
@@ -5758,6 +6112,20 @@
         <member name="M:ZhonTai.Admin.Services.User.UserService.AddAsync(ZhonTai.Admin.Services.User.Dto.UserAddInput)">
             <summary>
             新增用户
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ZhonTai.Admin.Services.User.UserService.AddMemberAsync(ZhonTai.Admin.Services.User.Dto.UserAddMemberInput)">
+            <summary>
+            新增会员
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ZhonTai.Admin.Services.User.UserService.UpdateMemberAsync(ZhonTai.Admin.Services.User.Dto.UserUpdateMemberInput)">
+            <summary>
+            修改会员
             </summary>
             <param name="input"></param>
             <returns></returns>
@@ -5825,11 +6193,12 @@
             <param name="ids"></param>
             <returns></returns>
         </member>
-        <member name="M:ZhonTai.Admin.Services.User.UserService.AvatarUpload(Microsoft.AspNetCore.Http.IFormFile)">
+        <member name="M:ZhonTai.Admin.Services.User.UserService.AvatarUpload(Microsoft.AspNetCore.Http.IFormFile,System.Boolean)">
             <summary>
             上传头像
             </summary>
             <param name="file"></param>
+            <param name="autoUpdate"></param>
             <returns></returns>
         </member>
         <member name="T:ZhonTai.Admin.Services.User.MapConfig">
@@ -5867,6 +6236,16 @@
             说明
             </summary>
         </member>
+        <member name="P:ZhonTai.Admin.Services.View.Dto.ViewAddInput.Cache">
+            <summary>
+            缓存
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.View.Dto.ViewAddInput.Sort">
+            <summary>
+            排序
+            </summary>
+        </member>
         <member name="P:ZhonTai.Admin.Services.View.Dto.ViewAddInput.Enabled">
             <summary>
             启用
@@ -5895,6 +6274,16 @@
         <member name="P:ZhonTai.Admin.Services.View.Dto.ViewListOutput.Path">
             <summary>
             视图路径
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.View.Dto.ViewListOutput.Cache">
+            <summary>
+            缓存
+            </summary>
+        </member>
+        <member name="P:ZhonTai.Admin.Services.View.Dto.ViewListOutput.Sort">
+            <summary>
+            排序
             </summary>
         </member>
         <member name="P:ZhonTai.Admin.Services.View.Dto.ViewListOutput.Enabled">
@@ -6311,6 +6700,11 @@
             TaskScheduler配置
             </summary>
         </member>
+        <member name="P:ZhonTai.Admin.Tools.TaskScheduler.TaskSchedulerOptions.DbKey">
+            <summary>
+            数据库键
+            </summary>
+        </member>
         <member name="P:ZhonTai.Admin.Tools.TaskScheduler.TaskSchedulerOptions.FreeSql">
             <summary>
             数据库实例
@@ -6336,6 +6730,14 @@
             添加任务调度
             </summary>
             <param name="services"></param>
+            <param name="configureOptions"></param>
+        </member>
+        <member name="M:ZhonTai.Admin.Tools.TaskScheduler.TaskSchedulerServiceExtensions.AddTaskScheduler(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String,System.Action{ZhonTai.Admin.Tools.TaskScheduler.TaskSchedulerOptions})">
+            <summary>
+            添加任务调度
+            </summary>
+            <param name="services"></param>
+            <param name="dbKey"></param>
             <param name="configureOptions"></param>
         </member>
         <member name="M:ZhonTai.Admin.Tools.TaskScheduler.TaskSchedulerServiceExtensions.UseTaskScheduler(Microsoft.AspNetCore.Builder.IApplicationBuilder)">

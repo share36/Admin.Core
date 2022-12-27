@@ -16,13 +16,15 @@ public interface IUserService
 {
     Task<UserGetOutput> GetAsync(long id);
 
-    Task<PageOutput<UserGetPageOutput>> GetPageAsync(PageInput<long?> input);
+    Task<PageOutput<UserGetPageOutput>> GetPageAsync(PageInput<UserGetPageDto> input);
 
     Task<AuthLoginOutput> GetLoginUserAsync(long id);
 
     Task<DataPermissionDto> GetDataPermissionAsync();
 
     Task<long> AddAsync(UserAddInput input);
+
+    Task<long> AddMemberAsync(UserAddMemberInput input);
 
     Task UpdateAsync(UserUpdateInput input);
 
@@ -42,9 +44,9 @@ public interface IUserService
 
     Task UpdateBasicAsync(UserUpdateBasicInput input);
 
-    Task<UserUpdateBasicInput> GetBasicAsync();
+    Task<UserGetBasicOutput> GetBasicAsync();
 
     Task<IList<UserPermissionsOutput>> GetPermissionsAsync();
 
-    Task<string> AvatarUpload([FromForm] IFormFile file);
+    Task<string> AvatarUpload([FromForm] IFormFile file, bool autoUpdate = false);
 }

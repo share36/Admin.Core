@@ -36,7 +36,7 @@ namespace ZhonTai.Admin.Services.User;
 /// 用户服务
 /// </summary>
 [DynamicApi(Area = AdminConsts.AreaName)]
-public class UserService : BaseService, IUserService, IDynamicApi
+public partial class UserService : BaseService, IUserService, IDynamicApi
 {
     private AppConfig _appConfig => LazyGetRequiredService<AppConfig>();
     private IUserRepository _userRepository => LazyGetRequiredService<IUserRepository>();
@@ -95,11 +95,12 @@ public class UserService : BaseService, IUserService, IDynamicApi
     /// <param name="input"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<PageOutput<UserGetPageOutput>> GetPageAsync(PageInput<long?> input)
+    public async Task<PageOutput<UserGetPageOutput>> GetPageAsync(PageInput<UserGetPageDto> input)
     {
-        var orgId = input.Filter;
+        var orgId = input.Filter?.OrgId;
         var list = await _userRepository.Select
         .WhereIf(orgId.HasValue && orgId > 0, a => _userOrgRepository.Where(b => b.UserId == a.Id && b.OrgId == orgId).Any())
+        .Where(a=>a.Type != UserType.Member)
         .WhereDynamicFilter(input.DynamicFilter)
         .Count(out var total)
         .OrderByDescending(true, a => a.Id)
@@ -239,14 +240,17 @@ public class UserService : BaseService, IUserService, IDynamicApi
     /// 查询用户基本信息
     /// </summary>
     /// <returns></returns>
-    public async Task<UserUpdateBasicInput> GetBasicAsync()
+    [Login]
+    public async Task<UserGetBasicOutput> GetBasicAsync()
     {
         if (!(User?.Id > 0))
         {
             throw ResultOutput.Exception("未登录！");
         }
 
-        var data = await _userRepository.GetAsync<UserUpdateBasicInput>(User.Id);
+        var data = await _userRepository.GetAsync<UserGetBasicOutput>(User.Id);
+        data.Mobile = DataMaskHelper.PhoneMask(data.Mobile);
+        data.Email = DataMaskHelper.EmailMask(data.Email);
         return data;
     }
 
@@ -313,8 +317,8 @@ public class UserService : BaseService, IUserService, IDynamicApi
         input.Password = MD5Encrypt.Encrypt32(input.Password);
 
         var entity = Mapper.Map<UserEntity>(input);
+        entity.Type = UserType.DefaultUser;
         var user = await _userRepository.InsertAsync(entity);
-
         var userId = user.Id;
 
         //用户角色
@@ -329,7 +333,7 @@ public class UserService : BaseService, IUserService, IDynamicApi
         }
 
         // 员工信息
-        var staff = Mapper.Map<UserStaffEntity>(input.Staff);
+        var staff = input.Staff == null ? new UserStaffEntity() : Mapper.Map<UserStaffEntity>(input.Staff);
         staff.Id = userId;
         await _staffRepository.InsertAsync(staff);
 
@@ -345,6 +349,79 @@ public class UserService : BaseService, IUserService, IDynamicApi
         }
 
         return userId;
+    }
+
+    /// <summary>
+    /// 新增会员
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    public virtual async Task<long> AddMemberAsync(UserAddMemberInput input)
+    {
+        using (_userRepository.DataFilter.DisableAll())
+        {
+            if (await _userRepository.Select.AnyAsync(a => a.UserName == input.UserName))
+            {
+                throw ResultOutput.Exception($"账号已存在");
+            }
+
+            if (input.Mobile.NotNull() && await _userRepository.Select.AnyAsync(a => a.Mobile == input.Mobile))
+            {
+                throw ResultOutput.Exception($"手机号已存在");
+            }
+
+            if (input.Email.NotNull() && await _userRepository.Select.AnyAsync(a => a.Email == input.Email))
+            {
+                throw ResultOutput.Exception($"邮箱已存在");
+            }
+
+            // 用户信息
+            if (input.Password.IsNull())
+            {
+                input.Password = _appConfig.DefaultPassword;
+            }
+
+            input.Password = MD5Encrypt.Encrypt32(input.Password);
+
+            var entity = Mapper.Map<UserEntity>(input);
+            entity.Type = UserType.Member;
+            var user = await _userRepository.InsertAsync(entity);
+
+            return user.Id;
+        }
+    }
+
+    /// <summary>
+    /// 修改会员
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    [AdminTransaction]
+    public virtual async Task UpdateMemberAsync(UserUpdateMemberInput input)
+    {
+        var user = await _userRepository.GetAsync(input.Id);
+        if (!(user?.Id > 0))
+        {
+            throw ResultOutput.Exception("用户不存在");
+        }
+
+        if (await _userRepository.Select.AnyAsync(a => a.Id != input.Id && a.UserName == input.UserName))
+        {
+            throw ResultOutput.Exception($"账号已存在");
+        }
+
+        if (input.Mobile.NotNull() && await _userRepository.Select.AnyAsync(a => a.Id != input.Id && a.Mobile == input.Mobile))
+        {
+            throw ResultOutput.Exception($"手机号已存在");
+        }
+
+        if (input.Email.NotNull() && await _userRepository.Select.AnyAsync(a => a.Id != input.Id && a.Email == input.Email))
+        {
+            throw ResultOutput.Exception($"邮箱已存在");
+        }
+
+        Mapper.Map(input, user);
+        await _userRepository.UpdateAsync(user);
     }
 
     /// <summary>
@@ -400,10 +477,7 @@ public class UserService : BaseService, IUserService, IDynamicApi
 
         // 员工信息
         var staff = await _staffRepository.GetAsync(userId);
-        if(staff == null)
-        {
-            staff = new UserStaffEntity();
-        }
+        staff ??= new UserStaffEntity();
         Mapper.Map(input.Staff, staff);
         staff.Id = userId;
         await _staffRepository.InsertOrUpdateAsync(staff);
@@ -428,9 +502,10 @@ public class UserService : BaseService, IUserService, IDynamicApi
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
+    [Login]
     public async Task UpdateBasicAsync(UserUpdateBasicInput input)
     {
-        var entity = await _userRepository.GetAsync(input.Id);
+        var entity = await _userRepository.GetAsync(User.Id);
         entity = Mapper.Map(input, entity);
         await _userRepository.UpdateAsync(entity);
     }
@@ -440,6 +515,7 @@ public class UserService : BaseService, IUserService, IDynamicApi
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
+    [Login]
     public async Task ChangePasswordAsync(UserChangePasswordInput input)
     {
         if (input.ConfirmPassword != input.NewPassword)
@@ -447,7 +523,7 @@ public class UserService : BaseService, IUserService, IDynamicApi
             throw ResultOutput.Exception("新密码和确认密码不一致");
         }
 
-        var entity = await _userRepository.GetAsync(input.Id);
+        var entity = await _userRepository.GetAsync(User.Id);
         var oldPassword = MD5Encrypt.Encrypt32(input.OldPassword);
         if (oldPassword != entity.Password)
         {
@@ -612,15 +688,22 @@ public class UserService : BaseService, IUserService, IDynamicApi
     /// 上传头像
     /// </summary>
     /// <param name="file"></param>
+    /// <param name="autoUpdate"></param>
     /// <returns></returns>
     [HttpPost]
     [Login]
-    public async Task<string> AvatarUpload([FromForm] IFormFile file)
+    public async Task<string> AvatarUpload([FromForm] IFormFile file, bool autoUpdate = false)
     {
         var uploadConfig = LazyGetRequiredService<IOptionsMonitor<UploadConfig>>().CurrentValue;
         var uploadHelper = LazyGetRequiredService<UploadHelper>();
         var config = uploadConfig.Avatar;
         var fileInfo = await uploadHelper.UploadAsync(file, config, new { User.Id });
+        if (autoUpdate)
+        {
+            var entity = await _userRepository.GetAsync(User.Id);
+            entity.Avatar = fileInfo.FileRelativePath;
+            await _userRepository.UpdateAsync(entity);
+        }
         return fileInfo.FileRelativePath;
     }
 }

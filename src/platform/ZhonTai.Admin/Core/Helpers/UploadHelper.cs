@@ -77,9 +77,7 @@ public class UploadHelper
     /// <returns></returns>
     public async Task SaveAsync(IFormFile file, string filePath, CancellationToken cancellationToken = default)
     {
-        using (var stream = new FileStream(filePath, FileMode.Create))
-        {
-            await file.CopyToAsync(stream, cancellationToken);
-        }
+        using var stream = File.Create(filePath);
+        await file.CopyToAsync(stream, cancellationToken);
     }
 }
